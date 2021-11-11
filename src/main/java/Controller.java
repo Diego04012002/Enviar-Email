@@ -76,6 +76,8 @@ public class Controller implements Initializable {
 	@FXML
 	private GridPane view;
 
+	private int puerotI;
+
 	public Controller() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
 		loader.setController(this);
@@ -107,9 +109,10 @@ public class Controller implements Initializable {
 	@FXML
 	void onEnviarButton(ActionEvent event) {
 		try {
+			puerotI = Integer.parseInt(puerto.get());
 			Email email = new SimpleEmail();
 			email.setHostName(nombre.get());
-			email.setSslSmtpPort(puerto.get());
+			email.setSmtpPort(puerotI);
 			email.setAuthenticator(new DefaultAuthenticator(emailR.get(), contra.get()));
 			email.setSSLOnConnect(conexion.get());
 			email.setFrom(emailR.get());
@@ -117,12 +120,12 @@ public class Controller implements Initializable {
 			email.setMsg(mensaje.get());
 			email.addTo(emailD.get());
 			email.send();
-			
-			Alert alertaB= new Alert(AlertType.INFORMATION);
+
+			Alert alertaB = new Alert(AlertType.INFORMATION);
 			alertaB.setTitle("Mensaje enviado");
 			alertaB.setHeaderText("Mensaje enviado con éxito a '" + emailD.get() + "'");
 			alertaB.show();
-			
+
 			asuntoText.clear();
 			mensajeTextArea.clear();
 			emaildText.clear();
@@ -132,9 +135,8 @@ public class Controller implements Initializable {
 			alerta.setTitle("Error");
 			alerta.setHeaderText("No se pudo enviar el email");
 			alerta.show();
-			e.printStackTrace();
 		}
-		
+
 	}
 
 	@FXML
@@ -146,6 +148,8 @@ public class Controller implements Initializable {
 		mensajeTextArea.clear();
 		nombreText.clear();
 		puertoText.clear();
+		conexionCheckbox.setSelected(false);
+		
 	}
 
 }

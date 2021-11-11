@@ -15,7 +15,7 @@ public class App extends Application {
 		
 		primaryStage.setScene(escena);
 		primaryStage.setTitle("Enviar email");
-		primaryStage.getIcons().addAll(new Image("/fxml/icon.png"));
+		primaryStage.getIcons().addAll(new Image("/images/icon.png"));
 		primaryStage.show();
 	}
 
