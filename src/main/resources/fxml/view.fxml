@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane fx:id="view" prefHeight="450.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+	<rowConstraints>
+		<RowConstraints />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+	</rowConstraints>
+	<columnConstraints>
+		<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+		<ColumnConstraints />
+	</columnConstraints>
+	<children>
+		<VBox alignment="CENTER_LEFT" prefHeight="175.0" prefWidth="292.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+					<children>
+						<Label text="Servidor SMTP:" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="nombreText" promptText="Nombre del IP del servidor" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="puertoText" prefHeight="25.0" prefWidth="75.0" promptText="Puerto" />
+					</children>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="15.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+					<children>
+						<Label text="Usar conexion SSL:" HBox.hgrow="ALWAYS" />
+						<CheckBox fx:id="conexionCheckbox" mnemonicParsing="false" />
+					</children>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="15.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+					<children>
+						<Label text="Remitente (From):" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="emailrText" promptText="Email del remitente" HBox.hgrow="ALWAYS" />
+                  <PasswordField fx:id="contraText" promptText="Contraseña" />
+					</children>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="15.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+					<children>
+						<Label text="Destinatario (To):" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="emaildText" promptText="Email del destinatario" HBox.hgrow="ALWAYS" />
+					</children>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="15.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+					<children>
+						<Label text="Asunto (Subject):" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="asuntoText" promptText="Asunto del mensaje" HBox.hgrow="ALWAYS" />
+					</children>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</HBox>
+				<TextArea fx:id="mensajeTextArea" prefHeight="251.0" prefWidth="549.0" promptText="Mensaje">
+					<VBox.margin>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</VBox.margin>
+				</TextArea>
+			</children>
+		</VBox>
+		<VBox alignment="TOP_CENTER" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+			<children>
+				<Button fx:id="enviarButton" mnemonicParsing="false" onAction="#onEnviarButton" text="Enviar" />
+				<Button fx:id="vaciarButton" mnemonicParsing="false" onAction="#onVaciarButton" text="Vaciar" />
+				<Button fx:id="cerrarButton" mnemonicParsing="false" onAction="#onCerrarButton" text="Cerrar" VBox.vgrow="ALWAYS" />
+			</children>
+		</VBox>
+	</children>
+	<padding>
+		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+	</padding>
+</GridPane>
