@@ -11,6 +11,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -37,6 +39,9 @@ public class Controller implements Initializable {
 	private StringProperty mensaje = new SimpleStringProperty();
 	private StringProperty nombre = new SimpleStringProperty();
 	private StringProperty puerto = new SimpleStringProperty();
+	private BooleanProperty running= new SimpleBooleanProperty();
+
+	private Task<Void> task;
 
 	// view
 
@@ -76,7 +81,7 @@ public class Controller implements Initializable {
 	@FXML
 	private GridPane view;
 
-	private int puerotI;
+	private int puertoI;
 
 	public Controller() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
@@ -94,6 +99,7 @@ public class Controller implements Initializable {
 		mensaje.bind(mensajeTextArea.textProperty());
 		nombre.bind(nombreText.textProperty());
 		puerto.bind(puertoText.textProperty());
+		enviarButton.disableProperty().bind(running);
 	}
 
 	public GridPane getView() {
@@ -108,35 +114,52 @@ public class Controller implements Initializable {
 
 	@FXML
 	void onEnviarButton(ActionEvent event) {
-		try {
-			puerotI = Integer.parseInt(puerto.get());
-			Email email = new SimpleEmail();
-			email.setHostName(nombre.get());
-			email.setSmtpPort(puerotI);
-			email.setAuthenticator(new DefaultAuthenticator(emailR.get(), contra.get()));
-			email.setSSLOnConnect(conexion.get());
-			email.setFrom(emailR.get());
-			email.setSubject(asunto.get());
-			email.setMsg(mensaje.get());
-			email.addTo(emailD.get());
-			email.send();
+
+		puertoI = Integer.parseInt(puerto.get());
+
+		task = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				Email email = new SimpleEmail();
+				email.setHostName(nombre.get());
+				email.setSmtpPort(puertoI);
+				email.setAuthenticator(new DefaultAuthenticator(emailR.get(), contra.get()));
+				email.setSSLOnConnect(conexion.get());
+				email.setFrom(emailR.get());
+				email.setSubject(asunto.get());
+				email.setMsg(mensaje.get());
+				email.addTo(emailD.get());
+				email.send();
+				return null;
+			}
+		};
+
+		task.setOnSucceeded(ev -> {
+			
 
 			Alert alertaB = new Alert(AlertType.INFORMATION);
+			alertaB.initOwner(view.getScene().getWindow());
 			alertaB.setTitle("Mensaje enviado");
 			alertaB.setHeaderText("Mensaje enviado con éxito a '" + emailD.get() + "'");
-			alertaB.show();
+			alertaB.showAndWait();
 
 			asuntoText.clear();
 			mensajeTextArea.clear();
 			emaildText.clear();
-		} catch (EmailException e) {
+		});
+		
+		running.bind(task.runningProperty());
+
+		task.setOnFailed(ev -> {
 			Alert alerta = new Alert(AlertType.ERROR);
+			alerta.initOwner(view.getScene().getWindow());
 			alerta.setContentText("Invalid message supplied");
 			alerta.setTitle("Error");
 			alerta.setHeaderText("No se pudo enviar el email");
-			alerta.show();
-		}
-
+			alerta.showAndWait();
+		});
+		new Thread(task).start();
 	}
 
 	@FXML
@@ -149,7 +172,6 @@ public class Controller implements Initializable {
 		nombreText.clear();
 		puertoText.clear();
 		conexionCheckbox.setSelected(false);
-		
 	}
 
 }
